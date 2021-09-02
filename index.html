@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<head>
+    <title>
+        Project #2: Classes - Derek Oquinn
+    </title>
+    <link href="style.css" rel="stylesheet" />
+</head>
+<script>
+
+    //css code---------------------------------
+    class Shape {
+        id = 0;
+        name = "Shape";
+        x = 0;
+        y = 0;
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+        }
+        draw() {
+            return "drawing a shape";
+        }
+    }
+    class box extends Shape {
+        constructor(x, y) {
+            super(x, y);
+            this.name = "Box";
+        }
+        draw() {
+            return "Box!";
+        }
+    }
+    //==================================
+    //Globals
+    var _x_position = 10;
+    var _y_position = 50;
+    var _offset = 50;
+    var _all_boxes = [];
+    const _max_number_of_boxes = 3;
+    const _x_limit = 1000;
+    const _width_and_height = 300;
+
+    //GIVEN SUBSET OF DATA
+    //VIDEO DEVICES
+   
+    //==================================
+    //Functions
+    var RenderBoxes = () => {
+
+        var vd1 = new VideoDevice (1, 22.99, 'Walmart', 1231233, '1920x1080', 'Ramen');
+        videoDevices.push(vd1);
+        var vd2 = new VideoDevice (0, 17.99, 'Pizza Pizaa', 237768, '2000x2000', 'Pizza');
+        videoDevices.push(vd2);
+        var vd3 = new VideoDevice (1, 99.99, 'Apple', 7689456, '720x1080', 'Phone');
+        videoDevices.push(vd3);
+
+        var hd1 = new HardDisk (1, 199.99, 'McDonalds', 908123980, 'large', '290mhz/s', 'big', 12);
+        hardDisks.push(hd1);
+        var hd2 = new HardDisk (1, 29999.99, 'Logitech', 125, 'small', '499mhz/s', 'small', 16);
+        hardDisks.push(hd2);
+        var hd3 = new HardDisk (1, 199.99, 'Glbally Local', 1233, 'medium', '2909mhz/s', 'massive', 1203);
+        hardDisks.push(hd3);
+
+        var ssd1 = new SSD (1, 199.99, 'Spotify', 908123980, 'large', '290mhz/s', 'big', 12);
+        SSDs.push(ssd1);
+        var ssd2 = new SSD (1, 29999.99, 'Dell', 125, 'small', '499mhz/s', 'small', 16);
+        SSDs.push(ssd2);
+        var ssd3 = new SSD (1, 199.99, 'Oh lol', 1233, 'medium', '2909mhz/s', 'massive', 1203);
+        SSDs.push(ssd3);
+      
+        if (_all_boxes.length <= 0) {
+            //Create box objects
+            for (var box_index = 1; box_index <= _max_number_of_boxes; box_index++) {
+                var obj = new box(box_index, box_index + 1);
+                obj.id = box_index;
+                //add the object to the container
+                _all_boxes.push(obj);
+                
+                
+            }
+            
+        }
+        //Create div container for boxs
+        
+        var div_output = "";
+        for(var box_index = 0; box_index < _all_boxes.length; box_index++){
+            div_output += `<div id='box_${_all_boxes[box_index].id}' class='box' `;
+            div_output += `style='left:${_x_position}px; top:${_y_position}px;'>`;
+            //TODO: RENDER PROPERTIES INSIDE DIV
+            //iterate object properties
+           
+            if(box_index == 0){
+            div_output+="<header>Video Device</header>"
+            for(var prop_name in videoDevices[box_index]){
+               
+                div_output += "<p>";
+                div_output += makeNames(prop_name);
+                div_output += `<input type="text" id='vd_${prop_name}_${videoDevices[box_index+1].id}' value='${videoDevices[box_index+1][prop_name]}'/>`;
+                div_output += "</p>";
+            }
+            
+            div_output += `<input type="button" class='button' value="Previous" onclick="prevVideoDevice('${videoDevices[box_index].id}')"/>`;
+            div_output += `<input type="button" class='button' value="Next" onclick="nextVideoDevice('${videoDevices[box_index].id}')"/>`;
+            div_output += `<br>`;
+            div_output += `<input type="button" class='button' value="New" onclick="newVideoDevice('${videoDevices[box_index].id}')"/>`;
+            div_output += `<input type="button" class='button' value="Update" onclick="updateVideoDevice('${videoDevices[box_index].id}')"/>`;
+
+            }
+            
+            if(box_index == 1){
+                div_output+="<header>Hard Disk</header>"
+                for(var prop_name in hardDisks[box_index]){
+                div_output += "<p>";
+                div_output += makeNames(prop_name);
+                  
+               div_output += `<input type="text" id='hd_${prop_name}_${hardDisks[box_index].id}' value='${hardDisks[box_index][prop_name]}'/>`;
+                div_output += "</p>";
+            }
+            div_output += `<input type="button" class='button'value="Previous" onclick="prevHardDisk('${hardDisks[box_index].id}')"/>`;
+            div_output += `<input type="button" class='button'value="Next" onclick="nextHardDisk('${hardDisks[box_index].id}')"/>`;
+            div_output += `<br>`;
+            div_output += `<input type="button" class='button'value="New" onclick="newHardDisk('${hardDisks[box_index].id}')"/>`;
+            div_output += `<input type="button" class='button'value="Update" onclick="updateHardDisk('${hardDisks[box_index].id}')"/>`;
+
+            }
+            if(box_index == 2){
+                div_output+="<header>SSD</header>"
+            for(var prop_name in SSDs[box_index]){
+                div_output += "<p>";
+                div_output += makeNames(prop_name);
+                div_output += `<input type="text" id='sd_${prop_name}_${SSDs[box_index].id}' value='${SSDs[box_index][prop_name]}'/>`;
+                div_output += "</p>";
+            }
+            div_output += `<input type="button" class='button'value="Previous" onclick="prevSSD('${SSDs[box_index].id}')"/>`;
+            div_output += `<input type="button" class='button'value="Next" onclick="nextSSD('${SSDs[box_index].id}')"/>`;
+            div_output += `<br>`;
+            div_output += `<input type="button" class='button'value="New" onclick="newSSD('${SSDs[box_index].id}')"/>`;
+            div_output += `<input type="button" class='button'value="Update" onclick="updateSSD('${SSDs[box_index].id}')"/>`;
+
+            }
+
+            
+            
+            
+            
+            div_output += "</div>";
+            if(_x_position >= _x_limit){
+                _x_position = 10;
+                _y_position+= _width_and_height + _offset;
+            }
+            else{
+                _x_position += _width_and_height + _offset;
+            }
+        }
+        //render to the screen
+        document.getElementById('main_container').innerHTML = div_output;
+    };
+    
+    //css classes------------------------------
+    //css code end---------------------------------
+
+    //More Globals
+    var videoDevices =[];
+    var hardDisks =[];
+    var SSDs = [];
+    var nextPrevVD = 0;
+    var nextPrevHD = 0;
+    var nextPrevSSD = 0;
+   
+   //FUNCTIONS TO CREATE BOXES/HTML
+
+
+    //NEW Functions
+    var newVideoDevice = (vidDev_id)=>{
+       
+        var addingDevice= [];
+            for(index = 0; index <= 5; index++){
+                for (var prop_name in videoDevices[index]){
+                    var x = document.getElementById(`vd_${prop_name}_${vidDev_id}`).value;
+            addingDevice.push(x);}
+            console.log(addingDevice[index]);}
+            var vd5 = new VideoDevice(addingDevice[0], addingDevice[1],addingDevice[2],addingDevice[3],addingDevice[4],addingDevice[5]);
+            videoDevices.push(vd5);
+     }
+    
+    var newHardDisk = (harddisk_id) =>{
+        var addingDevice= [];
+            for(index = 0; index <= 7; index++){
+                for (var prop_name in hardDisks[index]){
+                    var x = document.getElementById(`hd_${prop_name}_${harddisk_id}`).value;
+            addingDevice.push(x);}
+            console.log(addingDevice[index]);}
+            var hd5 = new HardDisk(addingDevice[0], addingDevice[1],addingDevice[2],addingDevice[3],addingDevice[4],addingDevice[5]);
+            hardDisks.push(hd5);
+    }
+
+    var newSSD = (SSD_id) =>{
+        var addingDevice= [];
+            for(index = 0; index <= 7; index++){
+                for (var prop_name in SSDs[index]){
+                    var x = document.getElementById(`sd_${prop_name}_${SSD_id}`).value;
+            addingDevice.push(x);}
+            console.log(addingDevice[index]);}
+            var obj5 = new SSD(addingDevice[0], addingDevice[1],addingDevice[2],addingDevice[3],addingDevice[4],addingDevice[5]);
+            SSDs.push(obj5);
+    }
+
+//UPDATE FUNCTIONS
+    var updateVideoDevice= (vidDev_id) =>{
+
+        
+        for (i=0; i <= 0; i++){
+        for (var prop_name in videoDevices[i]){
+            var x = document.getElementById(`vd_${prop_name}_${vidDev_id}`).value;
+            videoDevices[i][prop_name] = x;
+            console.log(prop_name, videoDevices[i][prop_name]);}
+            console.log(videoDevices[i]);}
+        
+    }
+    var updateHardDisk= (harddisk_id) =>{
+        for (i=0; i <= 0; i++){
+        for (var prop_name in hardDisks[i]){
+            var x = document.getElementById(`hd_${prop_name}_${harddisk_id}`).value;
+            hardDisks[i][prop_name] = x;
+            console.log(prop_name, hardDisks[i][prop_name]);}
+            console.log(hardDisks[i]);}
+        
+    }
+    var updateSSD= (SSD_id) =>{
+        for (i=0; i <= 0; i++){
+        for (var prop_name in SSDs[i]){
+            var x = document.getElementById(`sd_${prop_name}_${SSD_id}`).value;
+            SSDs[i][prop_name] = x;
+            console.log(prop_name, SSDs[i][prop_name]);}
+            console.log(SSDs[i]);}
+        
+    }
+
+//NEXT / PREV FUNCTIONS
+    var nextVideoDevice= (vidDev_id) =>{
+        if(nextPrevVD < videoDevices.length-1){
+        nextPrevVD += 1;
+        for (var prop_name in videoDevices[nextPrevVD]){
+
+             var x = videoDevices[nextPrevVD][prop_name];
+             document.getElementById(`vd_${prop_name}_${vidDev_id}`).value = x;
+            
+        }
+                
+            }
+        }
+    
+    var prevVideoDevice= (vidDev_id) =>{
+        if(nextPrevVD>0)
+        nextPrevVD -= 1;
+        for (var prop_name in videoDevices[nextPrevVD]){
+
+             var x = videoDevices[nextPrevVD][prop_name];
+             document.getElementById(`vd_${prop_name}_${vidDev_id}`).value = x;
+             
+             
+                
+            }
+        }
+
+    var nextHardDisk= (harddisk_id) =>{
+        if(nextPrevHD < hardDisks.length-1){
+        nextPrevHD += 1;
+        for (var prop_name in hardDisks[nextPrevHD]){
+
+             var x = hardDisks[nextPrevHD][prop_name];
+             document.getElementById(`hd_${prop_name}_${harddisk_id}`).value = x;
+            
+        }
+                
+            }
+        }
+    
+    var prevHardDisk= (harddisk_id) =>{
+        if(nextPrevHD>0)
+        nextPrevHD -= 1;
+        for (var prop_name in hardDisks[nextPrevHD]){
+
+             var x = hardDisks[nextPrevHD][prop_name];
+             document.getElementById(`hd_${prop_name}_${harddisk_id}`).value = x;
+             
+             
+                
+            }
+        }
+    
+    var nextSSD= (SSD_id) =>{
+        if(nextPrevSSD < SSDs.length-1){
+        nextPrevSSD += 1;
+        for (var prop_name in SSDs[nextPrevSSD]){
+
+             var x = SSDs[nextPrevSSD][prop_name];
+             document.getElementById(`sd_${prop_name}_${SSD_id}`).value = x;
+            
+        }
+                
+            }
+        }
+    
+    var prevSSD= (SSD_id) =>{
+        if(nextPrevSSD>0)
+        nextPrevSSD -= 1;
+        for (var prop_name in SSDs[nextPrevSSD]){
+
+             var x = SSDs[nextPrevSSD][prop_name];
+             document.getElementById(`sd_${prop_name}_${SSD_id}`).value = x;
+             
+             
+                
+            }
+        }
+
+        //MakeNames function to Print out proper versions of property names for Objects
+        var makeNames =(prop_name)=>{
+            var div_output = "";
+            switch(prop_name){
+            case "_status":
+            return div_output += "<label>Status: </label>";
+
+            case "replaceCost":
+            return div_output += "<label>Replacement Cost: </label>";
+
+            case "supplier":
+            return div_output += "<label>Supplier: </label>";
+            
+            case "serial":
+            return div_output += "<label>Serial #:</label>";
+
+            case "resolution":
+            return div_output += "<label>Resolution: </label>";
+            
+            case "type":
+            return div_output += "<label>Type: </label>";
+
+            case "size":
+            return div_output += "<label>Size: </label>";
+            
+            case "tRate":
+            return div_output += "<label>Transfer Rate: </label>";
+
+            case "wear":
+            return div_output += "<label>Wear: </label>";
+            case "pSize":
+            return div_output += "<label>Platter Size: </label>";
+
+            case "numPlatters":
+            return div_output += "<label># of Platters: </label>";
+        }};
+
+       
+
+        
+
+
+    class Device {
+
+
+        constructor(_status, replaceCost, supplier, serial){
+            this._status = _status
+            this.replaceCost = replaceCost;
+            this.supplier = supplier;
+            this.serial = serial;
+        }
+
+        get Status(){
+            return this._status;
+        }
+
+        enable(){
+            this._status = 1;
+            
+        }
+
+        disable(){
+            this._status = 0;
+        }
+        
+        
+    }
+        
+
+
+        
+
+
+
+    class VideoDevice extends Device{
+
+        constructor(_status, replaceCost, supplier, serial, resolution, type){
+            super(_status,replaceCost, supplier, serial);
+            this.resolution = resolution;
+            this.type = type;
+        }
+
+    }
+
+    class DiskDevice extends Device{
+
+        constructor(_status, replaceCost, supplier, serial, size, tRate){
+            super(_status,replaceCost, supplier, serial);
+            this.size = size;
+            this.tRate = tRate;}
+
+
+    }
+
+    class HardDisk extends DiskDevice{
+
+        constructor(_status, replaceCost, supplier, serial, size, tRate, pSize, numPlatters){
+            super(_status, replaceCost, supplier, serial, size, tRate);
+            this.pSize = pSize;
+            this.numPlatters = numPlatters;
+        }
+
+    }
+
+    class SSD extends DiskDevice{
+
+        constructor(_status, replaceCost, supplier, serial, size, tRate, type, wear){
+            super(_status, replaceCost, supplier, serial, size, tRate);
+            this.type = type;
+            this.wear = wear;
+        }
+    }
+    
+</script>
+<div id ="main_container">
+        <input type="button" value="Run Project 2" onclick="RenderBoxes()"/>
+
+</div>
